@@ -49,4 +49,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 		}
 	}
 
+	@Override
+	public Usuario obterPorId(Long id) {
+		
+		return repository.findById(id)
+				.orElseThrow(()-> new ObjectNotFoundException("Usuario não foi encontrado."));
+	}
+
 }
