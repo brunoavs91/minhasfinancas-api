@@ -1,5 +1,7 @@
 package com.bruno.minhasfinancas.converter;
 
+import java.util.Calendar;
+
 import org.apache.logging.log4j.util.Timer.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,10 +25,11 @@ public class LancamentoConverter {
 		lancamento.setDescricao(dto.getDescricao());
 		lancamento.setAno(dto.getAno());
 		lancamento.setMes(dto.getMes());
+		lancamento.setDataCadastro(dto.getDataCadastro() != null? dto.getDataCadastro():Calendar.getInstance());
 		lancamento.setValor(dto.getValor());
 		
 		Usuario usuario = usuarioService
-				.obterPorId(dto.getId());
+				.obterPorId(dto.getUsuario());
 		lancamento.setUsuario(usuario);
 		lancamento.setTipo(TipoLancamento.valueOf(dto.getTipo()));
 		lancamento.setStatus(StatusLancamento.valueOf(dto.getStatus()));

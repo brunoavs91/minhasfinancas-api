@@ -1,8 +1,7 @@
 package com.bruno.minhasfinancas.dto;
 
 import java.math.BigDecimal;
-
-import org.springframework.data.repository.NoRepositoryBean;
+import java.util.Calendar;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +19,7 @@ public class LancamentoDTO {
 	private Integer mes;
 	private Integer ano;
 	private BigDecimal valor;
+	private Calendar dataCadastro;
 	private Long usuario;
 	private String tipo;
 	private String status;

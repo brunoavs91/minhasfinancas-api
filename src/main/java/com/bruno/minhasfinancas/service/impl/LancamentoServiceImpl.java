@@ -11,8 +11,11 @@ import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bruno.minhasfinancas.dto.LancamentoDTO;
 import com.bruno.minhasfinancas.enums.StatusLancamento;
+import com.bruno.minhasfinancas.enums.TipoLancamento;
 import com.bruno.minhasfinancas.exception.BusinessExcepetion;
+import com.bruno.minhasfinancas.exception.ObjectNotFoundException;
 import com.bruno.minhasfinancas.model.entity.Lancamento;
 import com.bruno.minhasfinancas.model.repository.LancamentoRepository;
 import com.bruno.minhasfinancas.service.LancamentoService;
@@ -88,6 +91,41 @@ public class LancamentoServiceImpl implements LancamentoService{
 		if(lancamento.getTipo() == null) {
 			throw new BusinessExcepetion("Informe um tipo de Lançamento.");
 		}
+	}
+
+	@Override
+	public Lancamento obterPorId(Long id) {
+
+		return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Lancamento nao foi encontrado"));
+	}
+
+	@Override
+	public Lancamento atualizarLancamento(Long id, LancamentoDTO dto) {
+		Lancamento lancamento = obterPorId(id);
+		lancamento.setDescricao(dto.getDescricao());
+		lancamento.setAno(dto.getAno());
+		lancamento.setMes(dto.getMes());
+		lancamento.setStatus(StatusLancamento.valueOf(dto.getStatus()));
+		lancamento.setTipo(TipoLancamento.valueOf(dto.getTipo()));
+		lancamento.setValor(dto.getValor());
+		return lancamento;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public BigDecimal obterSaldoPorUsuario(Long id) {
+	BigDecimal receitas = repository.obterSaldoPorTipoLancamentoUsuario(id, TipoLancamento.RECEITA);
+	BigDecimal despesas = repository.obterSaldoPorTipoLancamentoUsuario(id, TipoLancamento.DESPESA);
+	
+	
+	
+	if(receitas == null) {
+		receitas = BigDecimal.ZERO;
+	}
+	if(despesas == null) {
+		despesas = BigDecimal.ZERO;
+	}
+		return receitas.subtract(despesas);
 	}
 
 }
