@@ -19,12 +19,18 @@ import javax.persistence.TemporalType;
 import com.bruno.minhasfinancas.enums.StatusLancamento;
 import com.bruno.minhasfinancas.enums.TipoLancamento;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Entity
 @Table(name ="lancamento" , schema = "financas")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Lancamento {
 	
 	@Id
